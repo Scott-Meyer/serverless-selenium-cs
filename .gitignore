@@ -1,0 +1,16 @@
+### macOS
+*.DS_Store
+
+###VS stuff
+src/.vs/
+src/pub/
+src/bin/
+src/obj/
+
+
+
+### Project specifics
+bin/
+
+### build file
+build.zip
