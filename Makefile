@@ -15,11 +15,10 @@ fetch-dependencies:
 	# Clean
 	rm headless-chromium.zip chromedriver.zip
 
-	#make the c# (bash right now so errors) TODO: fix (doesn't work anywhere)
-	(cd src; dotnet publish -c Release -o pub)
 
 dotnet:
-	dotnet publish -c Release -o pub
+	cd src; dotnet publish -c Release -o pub
+	cp -R bin src/pub/
 
 docker-build:
 	docker-compose build
@@ -27,8 +26,7 @@ docker-build:
 docker-run:
 	docker-compose run lambda serverless-selenium-cs::serverless_selenium_cs.Function::FunctionHandler "{\"url\": \"value3\",\"width\": \"value2\",\"height\": \"value1\"}"
 
-build-lambda-package:
-	clean fetch-dependencies
+build-lambda-package: clean fetch-dependencies dotnet
 	mkdir build
 	cp -r src/pub/* build/.
 	cp -r bin build./
