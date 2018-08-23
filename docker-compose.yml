@@ -8,3 +8,4 @@ services:
       - PATH=/var/task/bin
     volumes:
       - ./src/pub/:/var/task/
+      - ./build/:/var/task/build/

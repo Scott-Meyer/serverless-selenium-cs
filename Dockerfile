@@ -6,7 +6,3 @@ USER root
 ENV APP_DIR /var/task
 
 WORKDIR $APP_DIR
-
-COPY requirements.txt .
-COPY bin/chromedriver ./bin/
-COPY bin/headless-chromium ./bin/

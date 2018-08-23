@@ -5,7 +5,7 @@ fetch-dependencies:
 	mkdir -p bin/
 
 	# Get chromedriver
-	curl -SL https://chromedriver.storage.googleapis.com/2.32/chromedriver_linux64.zip > chromedriver.zip
+	curl -SL https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip > chromedriver.zip
 	unzip chromedriver.zip -d bin/
 
 	# Get Headless-chrome
@@ -15,6 +15,9 @@ fetch-dependencies:
 	# Clean
 	rm headless-chromium.zip chromedriver.zip
 
+	#make the c# (bash right now so errors) TODO: fix (doesn't work anywhere)
+	(cd src; dotnet publish -c Release -o pub)
+
 dotnet:
 	dotnet publish -c Release -o pub
 
@@ -22,10 +25,13 @@ docker-build:
 	docker-compose build
 
 docker-run:
-	docker-compose run lambda serverless-selenium-cs::serverless_selenium_cs.Function::FunctionHandler
+	docker-compose run lambda serverless-selenium-cs::serverless_selenium_cs.Function::FunctionHandler "{\"url\": \"value3\",\"width\": \"value2\",\"height\": \"value1\"}"
 
-
-#docker run --rm -v "c:/users/scott meyer/documents/git/serverless-selenium-cs/src/pub":/var/task lambci/lambda:dotnetcore2.1 serverless-selenium-cs::serverless_selenium_cs.Function::FunctionHandler '{"some": "event"}'
-
-
-#docker run --rm -v "c:/users/scott meyer/documents/git/serverless-selenium-cs/src/pub":/var/task serverless-selenium-cs_lambda serverless-selenium-cs::serverless_selenium_cs.Function::FunctionHandler '{"some": "event"}'
+build-lambda-package:
+	clean fetch-dependencies
+	mkdir build
+	cp -r src/pub/* build/.
+	cp -r bin build./
+	cd build; zip -9qr build.zip .
+	cp build/build.zip .
+	rm -rf build
